@@ -1,0 +1,57 @@
+version: "4"
+services:
+  webapp:
+    build:
+      context: ./server
+    networks:
+      my-attack-net:
+        ipv4_address: 192.168.100.11
+    container_name: webapp_container
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN  # Grants the container permission to modify network rules
+
+  ddos_attack1:
+    build:
+      context: ./attack
+    networks:
+      my-attack-net:
+        ipv4_address: 192.168.100.10
+    container_name: ddos_attack1_container
+    restart: unless-stopped
+  
+  ddos_attack2:
+    build:
+      context: ./attack
+    networks:
+      my-attack-net:
+        ipv4_address: 192.168.100.12
+    container_name: ddos_attack2_container
+    restart: unless-stopped
+
+  ddos_attack3:
+    build:
+      context: ./attack
+    networks:
+      my-attack-net:
+        ipv4_address: 192.168.100.13
+    container_name: ddos_attack3_container
+    restart: unless-stopped
+  
+  ddos_attack4:
+    build:
+      context: ./attack
+    networks:
+      my-attack-net:
+        ipv4_address: 192.168.100.14
+    container_name: ddos_attack4_container
+    restart: unless-stopped
+
+networks:
+  my-attack-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.100.0/24
